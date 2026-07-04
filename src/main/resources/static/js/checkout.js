@@ -46,7 +46,39 @@ function playBeep() {
     }
 
 }
+function playSuccessSound() {
 
+    const successSound = document.getElementById("successSound");
+
+    if (successSound) {
+
+        successSound.currentTime = 0;
+
+        successSound.play().catch(error => {
+
+            console.log("Unable to play success sound.", error);
+
+        });
+
+    }
+
+}
+
+function updateSuccessPopup() {
+
+    const amount =
+        document.getElementById("total").innerText;
+
+    const paymentMethod =
+        document.getElementById("paymentMethod").value;
+
+    document.getElementById("popupAmount").innerText =
+        "₹" + amount;
+
+    document.getElementById("popupMethod").innerText =
+        paymentMethod;
+
+}
 // ---------------------------
 // Loading Spinner
 // ---------------------------
@@ -329,9 +361,7 @@ async function checkout() {
             `/api/payment/checkout?paymentMethod=${encodeURIComponent(paymentMethod)}`,
 
             {
-
                 method: "POST"
-
             }
 
         );
@@ -352,15 +382,20 @@ async function checkout() {
 
         hideSpinner();
 
+        updateSuccessPopup();
+
+        playSuccessSound();
+
         showSuccessPopup();
 
+        // Redirect after animation finishes
         setTimeout(() => {
 
             hideSuccessPopup();
 
             window.location.href = `/receipt/${transactionId}`;
 
-        }, 1500);
+        }, 2000);
 
     }
 
