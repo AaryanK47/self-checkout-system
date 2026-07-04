@@ -1,4 +1,7 @@
 package com.selfcheckout.repository;
 
-public class TransactionItemRepository {
+import com.selfcheckout.entity.TransactionItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TransactionItemRepository extends JpaRepository<TransactionItem, Long> {
 }
