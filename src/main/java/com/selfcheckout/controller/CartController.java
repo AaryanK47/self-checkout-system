@@ -45,6 +45,22 @@ public class CartController {
         return ResponseEntity.ok("Quantity updated successfully.");
     }
 
+    @PutMapping("/increase/{productId}")
+    public ResponseEntity<?> increaseQuantity(@PathVariable Long productId) {
+
+        cartService.increaseQuantity(productId);
+
+        return ResponseEntity.ok("Quantity increased.");
+    }
+
+    @PutMapping("/decrease/{productId}")
+    public ResponseEntity<?> decreaseQuantity(@PathVariable Long productId) {
+
+        cartService.decreaseQuantity(productId);
+
+        return ResponseEntity.ok("Quantity decreased.");
+    }
+
     @GetMapping
     public ResponseEntity<?> viewCart() {
 

@@ -2,6 +2,7 @@ package com.selfcheckout.service;
 
 import com.selfcheckout.entity.Product;
 import com.selfcheckout.model.Cart;
+import com.selfcheckout.model.CartItem;
 import com.selfcheckout.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
@@ -51,5 +52,31 @@ public class CartService {
 
     public BigDecimal getTotal() {
         return cart.getTotal(TAX_RATE);
+    }
+
+    public void clearCart() {
+        cart.clearCart();
+    }
+
+    public void increaseQuantity(Long productId) {
+
+        CartItem item = cart.getItems()
+                .stream()
+                .filter(i -> i.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product not found in cart"));
+
+        cart.updateQuantity(productId, item.getQuantity() + 1);
+    }
+
+    public void decreaseQuantity(Long productId) {
+
+        CartItem item = cart.getItems()
+                .stream()
+                .filter(i -> i.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product not found in cart"));
+
+        cart.updateQuantity(productId, item.getQuantity() - 1);
     }
 }

@@ -65,4 +65,8 @@ public class Cart {
         return items.values();
     }
 
+    public void clearCart() {
+        items.clear();
+    }
+
 }
