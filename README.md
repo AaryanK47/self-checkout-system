@@ -135,7 +135,7 @@ SelfCheckoutSystem
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/self-checkout-system.git
+git clone https://github.com/AaryanK47/self-checkout-system.git
 ```
 
 ---
@@ -169,12 +169,12 @@ Update the database configuration according to your local MySQL installation.
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/self_checkout_db
 spring.datasource.username=root
-spring.datasource.password=YOUR_PASSWORD
+spring.datasource.password=WRITE_YOUR_PASSWORD_HERE
 
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-> Replace `YOUR_PASSWORD` with your local MySQL password.
+> Replace `WRITE_YOUR_PASSWORD_HERE` with your local MySQL password.
 
 ---
 
