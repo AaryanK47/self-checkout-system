@@ -5,6 +5,12 @@
 // Part 1/3
 // =======================================================
 
+let html5QrCode = null;
+
+let cameraRunning = false;
+
+let cameraModal = null;
+let scanInProgress = false;
 // ---------------------------
 // Page Load
 // ---------------------------
@@ -297,6 +303,153 @@ async function refreshCart(highlightProductId = null) {
 }
 
 // ---------------------------
+// Open Camera
+// ---------------------------
+
+async function openCamera() {
+
+    if (!cameraModal) {
+
+        cameraModal = new bootstrap.Modal(
+            document.getElementById("cameraModal")
+        );
+
+    }
+
+    cameraModal.show();
+
+    if (cameraRunning) {
+        return;
+    }
+
+    scanInProgress = false;
+
+    html5QrCode = new Html5Qrcode("reader");
+
+    try {
+
+        await html5QrCode.start(
+
+            {
+                facingMode: "environment"
+            },
+
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 120
+                }
+            },
+
+            async (decodedText) => {
+
+                if (scanInProgress) {
+                    return;
+                }
+
+                scanInProgress = true;
+
+                console.log("Barcode Detected : " + decodedText);
+
+                await addScannedProduct(decodedText);
+
+            },
+
+            () => {
+                // Ignore scan errors
+            }
+
+        );
+
+        cameraRunning = true;
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Unable to access camera.");
+
+    }
+
+}
+
+// ---------------------------
+// Close Camera
+// ---------------------------
+
+async function closeCamera() {
+
+    if (!cameraRunning) {
+
+        return;
+
+    }
+
+    await html5QrCode.stop();
+
+    await html5QrCode.clear();
+
+    cameraRunning = false;
+
+}
+
+// ---------------------------
+// Add Scanned Product
+// ---------------------------
+async function addScannedProduct(barcode) {
+
+    try {
+
+        const response = await fetch(`/api/scan/${barcode}`);
+
+        if (!response.ok) {
+
+            alert("Product not found.");
+
+            scanInProgress = false;
+
+            return;
+
+        }
+
+        const product = await response.json();
+
+        await fetch(`/api/cart/add/${product.id}`, {
+
+            method: "POST"
+
+        });
+
+        playBeep();
+
+        refreshCart();
+
+        await closeCamera();
+
+        cameraModal.hide();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Scanning failed.");
+
+    }
+
+    finally {
+
+        scanInProgress = false;
+
+    }
+
+}
+
+// ---------------------------
 // Increase Quantity
 // ---------------------------
 
@@ -343,6 +496,13 @@ async function removeItem(productId) {
     refreshCart();
 
 }
+document
+    .getElementById("cameraModal")
+    .addEventListener("hidden.bs.modal", function () {
+
+        closeCamera();
+
+    });
 // ---------------------------
 // Checkout
 // ---------------------------
