@@ -8,93 +8,95 @@ async function scanBarcode() {
         return;
     }
 
-    // Find product by barcode
-    const response = await fetch(`/api/scan/${barcode}`);
+    try {
 
-    if (!response.ok) {
-        alert("Product not found.");
+        const response = await fetch(`/api/scan/${barcode}`);
+
+        if (!response.ok) {
+            alert("Product not found.");
+            barcodeInput.value = "";
+            barcodeInput.focus();
+            return;
+        }
+
+        const product = await response.json();
+
+        await fetch(`/api/cart/add/${product.id}`, {
+            method: "POST"
+        });
+
         barcodeInput.value = "";
         barcodeInput.focus();
-        return;
+
+        refreshCart();
+
+    } catch (error) {
+        console.error(error);
+        alert("Something went wrong while scanning.");
     }
-
-    const product = await response.json();
-
-    // Add product to cart
-    await fetch(`/api/cart/add/${product.id}`, {
-        method: "POST"
-    });
-
-    barcodeInput.value = "";
-    barcodeInput.focus();
-
-    refreshCart();
 }
 
 async function refreshCart() {
 
-    const response = await fetch("/api/cart");
-    const cart = await response.json();
+    try {
 
-    const cartBody = document.getElementById("cartBody");
-    cartBody.innerHTML = "";
+        const response = await fetch("/api/cart");
+        const cart = await response.json();
 
-    cart.items.forEach(item => {
+        const cartBody = document.getElementById("cartBody");
+        cartBody.innerHTML = "";
 
-        cartBody.innerHTML += `
-            <tr>
+        cart.items.forEach(item => {
 
-                <td>${item.product.name}</td>
+            cartBody.innerHTML += `
+                <tr>
 
-                <td>
+                    <td>${item.product.name}</td>
 
-                    <button
-                        class="btn btn-secondary btn-sm"
-                        onclick="decreaseQuantity(${item.product.id})">
+                    <td>
 
-                        -
+                        <button
+                                class="btn btn-secondary btn-sm"
+                                onclick="decreaseQuantity(${item.product.id})">-</button>
 
-                    </button>
+                        <span class="mx-2 fw-bold">${item.quantity}</span>
 
-                    <span class="mx-2 fw-bold">
+                        <button
+                                class="btn btn-success btn-sm"
+                                onclick="increaseQuantity(${item.product.id})">+</button>
 
-                        ${item.quantity}
+                    </td>
 
-                    </span>
+                    <td>₹${item.product.price}</td>
 
-                    <button
-                        class="btn btn-success btn-sm"
-                        onclick="increaseQuantity(${item.product.id})">
+                    <td>₹${item.lineTotal}</td>
 
-                        +
+                    <td>
 
-                    </button>
+                        <button
+                                class="btn btn-danger btn-sm"
+                                onclick="removeItem(${item.product.id})">
 
-                </td>
+                            Remove
 
-                <td>₹${item.product.price}</td>
+                        </button>
 
-                <td>₹${item.lineTotal}</td>
+                    </td>
 
-                <td>
+                </tr>
+            `;
+        });
 
-                    <button
-                        class="btn btn-danger btn-sm"
-                        onclick="removeItem(${item.product.id})">
+        document.getElementById("subtotal").innerText = cart.subtotal;
+        document.getElementById("tax").innerText = cart.tax;
+        document.getElementById("total").innerText = cart.total;
 
-                        Remove
+    } catch (error) {
 
-                    </button>
+        console.error(error);
+        alert("Unable to load cart.");
 
-                </td>
-
-            </tr>
-        `;
-    });
-
-    document.getElementById("subtotal").innerText = cart.subtotal;
-    document.getElementById("tax").innerText = cart.tax;
-    document.getElementById("total").innerText = cart.total;
+    }
 }
 
 async function increaseQuantity(productId) {
@@ -124,5 +126,34 @@ async function removeItem(productId) {
     refreshCart();
 }
 
-// Load cart when page opens
+async function checkout() {
+
+    const paymentMethod = document.getElementById("paymentMethod").value;
+
+    try {
+
+        const response = await fetch(
+            `/api/payment/checkout?paymentMethod=${encodeURIComponent(paymentMethod)}`,
+            {
+                method: "POST"
+            }
+        );
+
+        if (!response.ok) {
+            alert(await response.text());
+            return;
+        }
+
+        const transactionId = await response.text();
+
+        window.location.href = `/receipt/${transactionId}`;
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Checkout failed.");
+
+    }
+}
+
 refreshCart();

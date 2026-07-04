@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +19,8 @@ public class TransactionItem {
 
     private int quantity;
 
-    private double price;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "transaction_id")
@@ -26,4 +29,9 @@ public class TransactionItem {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Transient
+    public BigDecimal getLineTotal() {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
 }

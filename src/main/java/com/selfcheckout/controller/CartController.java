@@ -1,6 +1,7 @@
 package com.selfcheckout.controller;
 
 import com.selfcheckout.service.CartService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +63,10 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<?> viewCart() {
+    public ResponseEntity<?> viewCart(HttpSession session) {
+
+        System.out.println("Session ID: " + session.getId());
+        System.out.println("Cart size = " + cartService.getCart().getItems().size());
 
         Map<String, Object> response = new LinkedHashMap<>();
 

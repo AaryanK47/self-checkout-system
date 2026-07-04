@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Purchase Receipt</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+
+        <h2 class="text-center mb-3">
+            🧾 Purchase Receipt
+        </h2>
+
+        <hr>
+
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+                <strong>Transaction ID :</strong>
+                <span th:text="${transaction.id}"></span>
+            </div>
+
+            <div class="col-md-4 text-center">
+                <strong>Payment :</strong>
+                <span th:text="${transaction.paymentMethod}"></span>
+            </div>
+
+            <div class="col-md-4 text-md-end">
+                <strong>Date & Time :</strong>
+                <span th:text="${transaction.transactionTime}"></span>
+            </div>
+
+        </div>
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+
+            <tr>
+
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:each="item : ${transaction.items}">
+
+                <td th:text="${item.product.name}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td>₹ <span th:text="${item.price}"></span></td>
+                <td>₹ <span th:text="${item.lineTotal}"></span></td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+        <hr>
+
+        <div class="text-end">
+
+            <h5>Subtotal : ₹ <span th:text="${transaction.subtotal}"></span></h5>
+
+            <h5>Tax (18%) : ₹ <span th:text="${transaction.tax}"></span></h5>
+
+            <h3 class="text-success">
+
+                Grand Total : ₹ <span th:text="${transaction.total}"></span>
+
+            </h3>
+
+        </div>
+
+        <div class="text-center mt-4">
+
+            <h4 class="text-success">
+                Thank You for Shopping!
+            </h4>
+
+            <p class="text-muted">
+                Visit Again
+            </p>
+
+            <a href="/" class="btn btn-primary btn-lg">
+
+                Start New Purchase
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.math.BigDecimal;
+import static com.selfcheckout.config.AppConstants.TAX_RATE;
 
 @Service
 @SessionScope
 public class CartService {
-
-    private static final BigDecimal TAX_RATE = new BigDecimal("0.05");
 
     private final Cart cart = new Cart();
     private final ProductRepository productRepository;
