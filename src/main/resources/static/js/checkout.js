@@ -183,6 +183,8 @@ async function scanBarcode() {
 
         await refreshCart(product.id);
 
+        await showRecommendations(barcode);
+
     }
 
     catch (error) {
@@ -431,6 +433,8 @@ async function addScannedProduct(barcode) {
 
         refreshCart();
 
+        await showRecommendations(barcode);
+
         await closeCamera();
 
         cameraModal.hide();
@@ -449,6 +453,86 @@ async function addScannedProduct(barcode) {
 
         scanInProgress = false;
 
+    }
+
+}
+
+// ---------------------------
+// Frequently Bought Together
+// ---------------------------
+
+async function showRecommendations(barcode) {
+
+    const section = document.getElementById("recommendationsCard");
+    const body = document.getElementById("recommendationsBody");
+
+    try {
+
+        const response = await fetch(`/api/products/recommendations/${barcode}`);
+
+        if (!response.ok) {
+            section.style.display = "none";
+            return;
+        }
+
+        const recommendations = await response.json();
+
+        if (!recommendations || recommendations.length === 0) {
+            section.style.display = "none";
+            body.innerHTML = "";
+            return;
+        }
+
+        body.innerHTML = "";
+
+        recommendations.forEach(product => {
+
+            body.innerHTML += `
+                <div class="col-md-4">
+                    <div class="recommend-item p-3">
+                        <div class="fw-bold mb-1">${product.name}</div>
+                        <div class="text-success mb-2">₹${product.price}</div>
+                        <button
+                            class="btn btn-primary btn-sm w-100"
+                            onclick="addRecommendedProduct(${product.id}, '${barcode}')">
+                            + Add
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        });
+
+        section.style.display = "block";
+
+    }
+
+    catch (error) {
+        console.error(error);
+        section.style.display = "none";
+    }
+
+}
+
+async function addRecommendedProduct(productId, barcode) {
+
+    try {
+
+        await fetch(`/api/cart/add/${productId}`, { method: "POST" });
+
+        playBeep();
+
+        showToast("Item added to cart.", "success");
+
+        await refreshCart(productId);
+
+        await showRecommendations(barcode);
+
+    }
+
+    catch (error) {
+        console.error(error);
+        showToast("Unable to add product.", "error");
     }
 
 }
