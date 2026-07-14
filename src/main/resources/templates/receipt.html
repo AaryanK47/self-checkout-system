@@ -16,6 +16,20 @@
 
 <body>
 
+<script>
+    (function () {
+        var saved = localStorage.getItem("scs-theme");
+        var theme = (saved === "dark" || saved === "light")
+            ? saved
+            : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+    })();
+</script>
+
+<button id="themeToggle" class="theme-toggle-btn" title="Toggle dark mode">🌙</button>
+
 <div class="container mt-5">
 
     <div class="receipt-card card p-4">
@@ -293,6 +307,6 @@
 
 </div>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-</body>
+<script th:src="@{/js/theme.js}"></script></body>
 
 </html>

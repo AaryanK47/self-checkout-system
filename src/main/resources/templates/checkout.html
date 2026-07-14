@@ -15,6 +15,20 @@
 
 <body>
 
+<script>
+    (function () {
+        var saved = localStorage.getItem("scs-theme");
+        var theme = (saved === "dark" || saved === "light")
+            ? saved
+            : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+    })();
+</script>
+
+<button id="themeToggle" class="theme-toggle-btn" title="Toggle dark mode">🌙</button>
+
 <!-- Loading Spinner -->
 <div id="loadingSpinner" class="spinner-overlay">
 
@@ -155,6 +169,15 @@
 
                 </button>
 
+                <button
+                        id="voiceButton"
+                        class="btn btn-warning"
+                        onclick="startVoiceSearch()">
+
+                    🎤 Voice
+
+                </button>
+
             </div>
 
         </div>
@@ -281,6 +304,66 @@
 
     </div>
 
+    <!-- Frequently Bought Together -->
+
+    <div id="recommendationsCard" class="card p-4 mt-4" style="display:none;">
+
+        <h4 class="mb-3">
+
+            🛒 Frequently Bought Together
+
+        </h4>
+
+        <div id="recommendationsBody" class="row g-3">
+
+        </div>
+
+    </div>
+
+    <!-- Recommended Products -->
+
+    <div id="recommendedProductsCard" class="card p-4 mt-4" style="display:none;">
+
+        <h4 class="mb-3">
+
+            🚀 Recommended Products
+
+        </h4>
+
+        <div id="popularGroup" class="mb-4" style="display:none;">
+
+            <h6 class="text-muted mb-2">🔥 Popular Products</h6>
+
+            <div id="popularBody" class="row g-3"></div>
+
+        </div>
+
+        <div id="basedOnCartGroup" class="mb-4" style="display:none;">
+
+            <h6 class="text-muted mb-2">🛒 Based on Your Cart</h6>
+
+            <div id="basedOnCartBody" class="row g-3"></div>
+
+        </div>
+
+        <div id="sameCategoryGroup" class="mb-4" style="display:none;">
+
+            <h6 class="text-muted mb-2">📦 Similar to Last Scan</h6>
+
+            <div id="sameCategoryBody" class="row g-3"></div>
+
+        </div>
+
+        <div id="dailyPicksGroup" style="display:none;">
+
+            <h6 class="text-muted mb-2">🎲 Today's Picks</h6>
+
+            <div id="dailyPicksBody" class="row g-3"></div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <!-- Barcode Beep -->
@@ -332,8 +415,63 @@
 
 </div>
 
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/html5-qrcode.min.js}"></script>
+<script th:src="@{/js/theme.js}"></script>
+
+<script>
+
+    function showToast(message, type = "success") {
+
+        let background;
+
+        switch(type){
+
+            case "success":
+                background = "#28a745";
+                break;
+
+            case "error":
+                background = "#dc3545";
+                break;
+
+            case "warning":
+                background = "#ffc107";
+                break;
+
+            case "info":
+                background = "#0d6efd";
+                break;
+
+            default:
+                background = "#343a40";
+
+        }
+
+        Toastify({
+
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            close: true,
+            stopOnFocus: true,
+
+            style: {
+                background: background
+            }
+
+        }).showToast();
+
+    }
+
+</script>
+
 <script th:src="@{/js/checkout.js}"></script>
 
 </body>

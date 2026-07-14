@@ -146,6 +146,76 @@ public class DataSeeder implements CommandLineRunner {
 
         //Grocery (100)
         addProduct("Wheat Flour (5 kg)", "100", new BigDecimal("280.00"), 26, "Grocery");
+
+        // ==========================================
+        // Frozen Foods (101-110)
+        // ==========================================
+        addProduct("Frozen Peas", "101", new BigDecimal("120.00"), 25, "Frozen Foods");
+        addProduct("Sweet Corn", "102", new BigDecimal("90.00"), 30, "Frozen Foods");
+        addProduct("French Fries", "103", new BigDecimal("150.00"), 20, "Frozen Foods");
+        addProduct("Veg Nuggets", "104", new BigDecimal("180.00"), 15, "Frozen Foods");
+        addProduct("Chicken Nuggets", "105", new BigDecimal("220.00"), 18, "Frozen Foods");
+        addProduct("Frozen Paratha", "106", new BigDecimal("110.00"), 25, "Frozen Foods");
+        addProduct("Frozen Pizza", "107", new BigDecimal("280.00"), 12, "Frozen Foods");
+        addProduct("Frozen Samosa", "108", new BigDecimal("160.00"), 20, "Frozen Foods");
+        addProduct("Frozen Spring Rolls", "109", new BigDecimal("190.00"), 18, "Frozen Foods");
+        addProduct("Frozen Mixed Vegetables", "110", new BigDecimal("140.00"), 22, "Frozen Foods");
+
+        // ==========================================
+        // Ice Creams (111-120)
+        // ==========================================
+        addProduct("Vanilla Ice Cream", "111", new BigDecimal("120.00"), 20, "Ice Creams");
+        addProduct("Chocolate Ice Cream", "112", new BigDecimal("140.00"), 18, "Ice Creams");
+        addProduct("Strawberry Ice Cream", "113", new BigDecimal("130.00"), 16, "Ice Creams");
+        addProduct("Butterscotch Ice Cream", "114", new BigDecimal("145.00"), 18, "Ice Creams");
+        addProduct("Mango Ice Cream", "115", new BigDecimal("135.00"), 15, "Ice Creams");
+        addProduct("Kulfi", "116", new BigDecimal("40.00"), 35, "Ice Creams");
+        addProduct("Choco Bar", "117", new BigDecimal("35.00"), 40, "Ice Creams");
+        addProduct("Cassata", "118", new BigDecimal("60.00"), 22, "Ice Creams");
+        addProduct("Family Pack Vanilla", "119", new BigDecimal("260.00"), 10, "Ice Creams");
+        addProduct("Family Pack Chocolate", "120", new BigDecimal("280.00"), 10, "Ice Creams");
+
+        // ==========================================
+        // Baby Care (121-130)
+        // ==========================================
+        addProduct("Baby Diapers", "121", new BigDecimal("499.00"), 18, "Baby Care");
+        addProduct("Baby Wipes", "122", new BigDecimal("180.00"), 25, "Baby Care");
+        addProduct("Baby Soap", "123", new BigDecimal("65.00"), 30, "Baby Care");
+        addProduct("Baby Shampoo", "124", new BigDecimal("220.00"), 20, "Baby Care");
+        addProduct("Baby Powder", "125", new BigDecimal("140.00"), 22, "Baby Care");
+        addProduct("Baby Lotion", "126", new BigDecimal("250.00"), 18, "Baby Care");
+        addProduct("Baby Oil", "127", new BigDecimal("190.00"), 20, "Baby Care");
+        addProduct("Baby Feeding Bottle", "128", new BigDecimal("150.00"), 15, "Baby Care");
+        addProduct("Baby Cereal", "129", new BigDecimal("320.00"), 12, "Baby Care");
+        addProduct("Baby Toothbrush", "130", new BigDecimal("55.00"), 30, "Baby Care");
+
+        // ==========================================
+        // Pet Care (131-140)
+        // ==========================================
+        addProduct("Dog Food", "131", new BigDecimal("450.00"), 18, "Pet Care");
+        addProduct("Cat Food", "132", new BigDecimal("420.00"), 18, "Pet Care");
+        addProduct("Dog Biscuits", "133", new BigDecimal("180.00"), 20, "Pet Care");
+        addProduct("Cat Litter", "134", new BigDecimal("350.00"), 15, "Pet Care");
+        addProduct("Pet Shampoo", "135", new BigDecimal("240.00"), 16, "Pet Care");
+        addProduct("Pet Bowl", "136", new BigDecimal("180.00"), 20, "Pet Care");
+        addProduct("Dog Leash", "137", new BigDecimal("280.00"), 15, "Pet Care");
+        addProduct("Pet Toys", "138", new BigDecimal("120.00"), 30, "Pet Care");
+        addProduct("Bird Feed", "139", new BigDecimal("150.00"), 25, "Pet Care");
+        addProduct("Fish Food", "140", new BigDecimal("110.00"), 25, "Pet Care");
+
+        // ==========================================
+        // Stationery (141-150)
+        // ==========================================
+        addProduct("Notebook", "141", new BigDecimal("60.00"), 50, "Stationery");
+        addProduct("Pen", "142", new BigDecimal("20.00"), 100, "Stationery");
+        addProduct("Pencil", "143", new BigDecimal("10.00"), 120, "Stationery");
+        addProduct("Eraser", "144", new BigDecimal("8.00"), 100, "Stationery");
+        addProduct("Sharpener", "145", new BigDecimal("12.00"), 80, "Stationery");
+        addProduct("Scale", "146", new BigDecimal("15.00"), 70, "Stationery");
+        addProduct("Marker", "147", new BigDecimal("35.00"), 60, "Stationery");
+        addProduct("Glue Stick", "148", new BigDecimal("40.00"), 45, "Stationery");
+        addProduct("Stapler", "149", new BigDecimal("120.00"), 25, "Stationery");
+        addProduct("Highlighter", "150", new BigDecimal("50.00"), 40, "Stationery");
     }
 
     private void addProduct(String name,

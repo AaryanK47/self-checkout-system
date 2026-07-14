@@ -11,6 +11,7 @@ let cameraRunning = false;
 
 let cameraModal = null;
 let scanInProgress = false;
+let lastScannedBarcode = null;
 // ---------------------------
 // Page Load
 // ---------------------------
@@ -141,7 +142,7 @@ async function scanBarcode() {
 
     if (barcode === "") {
 
-        alert("Please enter a barcode.");
+        showToast("Please enter a barcode.", "warning");
 
         barcodeInput.focus();
 
@@ -155,7 +156,7 @@ async function scanBarcode() {
 
         if (!response.ok) {
 
-            alert("Product not found.");
+            showToast("Product not found.", "error");
 
             barcodeInput.value = "";
 
@@ -173,7 +174,11 @@ async function scanBarcode() {
 
         });
 
+        lastScannedBarcode = barcode;
+
         playBeep();
+
+        showToast(`${product.name} added to cart.`, "success");
 
         barcodeInput.value = "";
 
@@ -181,13 +186,15 @@ async function scanBarcode() {
 
         await refreshCart(product.id);
 
+        await showRecommendations(barcode);
+
     }
 
     catch (error) {
 
         console.error(error);
 
-        alert("Unable to scan product.");
+        showToast("Unable to scan product.", "error");
 
     }
 
@@ -290,13 +297,15 @@ async function refreshCart(highlightProductId = null) {
         document.getElementById("total").innerText =
             cart.total;
 
+        await showRecommendedProducts();
+
     }
 
     catch (error) {
 
         console.error(error);
 
-        alert("Unable to refresh cart.");
+        showToast("Unable to refresh cart.", "error");
 
     }
 
@@ -370,7 +379,7 @@ async function openCamera() {
 
         console.error(error);
 
-        alert("Unable to access camera.");
+        showToast("Unable to access camera.", "error");
 
     }
 
@@ -407,7 +416,7 @@ async function addScannedProduct(barcode) {
 
         if (!response.ok) {
 
-            alert("Product not found.");
+            showToast("Product not found.", "error");
 
             scanInProgress = false;
 
@@ -423,9 +432,15 @@ async function addScannedProduct(barcode) {
 
         });
 
+        lastScannedBarcode = barcode;
+
         playBeep();
 
+        showToast(`${product.name} added to cart.`, "success");
+
         refreshCart();
+
+        await showRecommendations(barcode);
 
         await closeCamera();
 
@@ -437,13 +452,215 @@ async function addScannedProduct(barcode) {
 
         console.error(error);
 
-        alert("Scanning failed.");
+        showToast("Scanning failed.", "error");
 
     }
 
     finally {
 
         scanInProgress = false;
+
+    }
+
+}
+
+// ---------------------------
+// Frequently Bought Together
+// ---------------------------
+
+async function showRecommendations(barcode) {
+
+    const section = document.getElementById("recommendationsCard");
+    const body = document.getElementById("recommendationsBody");
+
+    try {
+
+        const response = await fetch(`/api/products/recommendations/${barcode}`);
+
+        if (!response.ok) {
+            section.style.display = "none";
+            return;
+        }
+
+        const recommendations = await response.json();
+
+        if (!recommendations || recommendations.length === 0) {
+            section.style.display = "none";
+            body.innerHTML = "";
+            return;
+        }
+
+        body.innerHTML = "";
+
+        recommendations.forEach(product => {
+
+            body.innerHTML += `
+                <div class="col-md-4">
+                    <div class="recommend-item p-3">
+                        <div class="fw-bold mb-1">${product.name}</div>
+                        <div class="text-success mb-2">₹${product.price}</div>
+                        <button
+                            class="btn btn-primary btn-sm w-100"
+                            onclick="addRecommendedProduct(${product.id}, '${barcode}')">
+                            + Add
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        });
+
+        section.style.display = "block";
+
+    }
+
+    catch (error) {
+        console.error(error);
+        section.style.display = "none";
+    }
+
+}
+
+async function addRecommendedProduct(productId, barcode) {
+
+    try {
+
+        await fetch(`/api/cart/add/${productId}`, { method: "POST" });
+
+        playBeep();
+
+        showToast("Item added to cart.", "success");
+
+        await refreshCart(productId);
+
+        await showRecommendations(barcode);
+
+    }
+
+    catch (error) {
+        console.error(error);
+        showToast("Unable to add product.", "error");
+    }
+
+}
+
+// ---------------------------
+// Recommended Products
+// ---------------------------
+
+async function showRecommendedProducts() {
+
+    const section = document.getElementById("recommendedProductsCard");
+
+    try {
+
+        const params = lastScannedBarcode
+            ? `?lastScannedBarcode=${encodeURIComponent(lastScannedBarcode)}`
+            : "";
+
+        const response = await fetch(`/api/products/recommended${params}`);
+
+        if (!response.ok) {
+
+            section.style.display = "none";
+
+            return;
+
+        }
+
+        const data = await response.json();
+
+        renderRecommendationGroup("popularGroup", "popularBody", data.popular);
+        renderRecommendationGroup("basedOnCartGroup", "basedOnCartBody", data.basedOnCart);
+        renderRecommendationGroup("sameCategoryGroup", "sameCategoryBody", data.sameCategory);
+        renderRecommendationGroup("dailyPicksGroup", "dailyPicksBody", data.dailyPicks);
+
+        const hasAny =
+            (data.popular && data.popular.length) ||
+            (data.basedOnCart && data.basedOnCart.length) ||
+            (data.sameCategory && data.sameCategory.length) ||
+            (data.dailyPicks && data.dailyPicks.length);
+
+        section.style.display = hasAny ? "block" : "none";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        section.style.display = "none";
+
+    }
+
+}
+
+function renderRecommendationGroup(groupId, bodyId, products) {
+
+    const group = document.getElementById(groupId);
+    const body = document.getElementById(bodyId);
+
+    if (!products || products.length === 0) {
+
+        group.style.display = "none";
+
+        return;
+
+    }
+
+    body.innerHTML = "";
+
+    products.forEach(product => {
+
+        body.innerHTML += `
+
+            <div class="col-md-3 col-sm-6">
+
+                <div class="recommend-item p-3">
+
+                    <div class="fw-bold mb-1">${product.name}</div>
+
+                    <div class="text-success mb-2">₹${product.price}</div>
+
+                    <button
+                        class="btn btn-primary btn-sm w-100"
+                        onclick="addRecommendedToCart(${product.id})">
+
+                        + Add
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+    group.style.display = "block";
+
+}
+
+async function addRecommendedToCart(productId) {
+
+    try {
+
+        await fetch(`/api/cart/add/${productId}`, { method: "POST" });
+
+        playBeep();
+
+        showToast("Item added to cart.", "success");
+
+        await refreshCart(productId);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Unable to add product.", "error");
 
     }
 
@@ -493,6 +710,8 @@ async function removeItem(productId) {
 
     });
 
+    showToast("Item removed from cart.", "info");
+
     refreshCart();
 
 }
@@ -532,7 +751,7 @@ async function checkout() {
 
             const message = await response.text();
 
-            alert(message);
+            showToast(message, "error");
 
             return;
 
@@ -547,6 +766,8 @@ async function checkout() {
         playSuccessSound();
 
         showSuccessPopup();
+
+        showToast("Payment successful!", "success");
 
         // Redirect after animation finishes
         setTimeout(() => {
@@ -565,7 +786,7 @@ async function checkout() {
 
         console.error(error);
 
-        alert("Checkout failed.");
+        showToast("Checkout failed.", "error");
 
     }
 
@@ -593,6 +814,128 @@ function cancelTransaction() {
 function formatCurrency(value) {
 
     return "₹" + Number(value).toFixed(2);
+
+}
+
+// ==========================================
+// Voice Search
+// ==========================================
+
+let recognition;
+
+if ('webkitSpeechRecognition' in window) {
+
+    recognition = new webkitSpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+}
+
+async function startVoiceSearch() {
+
+    if (!recognition) {
+
+        showToast("Voice recognition is not supported.", "error");
+
+        return;
+
+    }
+
+    const button = document.getElementById("voiceButton");
+
+    button.innerHTML = "🔴 Listening...";
+
+    button.disabled = true;
+
+    showToast("Listening...", "info");
+
+    recognition.start();
+
+    recognition.onresult = async function(event) {
+
+        const spokenText =
+            event.results[0][0].transcript;
+
+        console.log(spokenText);
+
+        button.innerHTML = "🎤 Voice";
+
+        button.disabled = false;
+
+        searchVoiceProduct(spokenText);
+
+    };
+
+    recognition.onerror = function() {
+
+        button.innerHTML = "🎤 Voice";
+
+        button.disabled = false;
+
+        showToast("Voice recognition failed.", "error");
+
+    };
+
+    recognition.onend = function() {
+
+        button.innerHTML = "🎤 Voice";
+
+        button.disabled = false;
+
+    };
+
+}
+
+async function searchVoiceProduct(productName) {
+
+    try {
+
+        const response = await fetch(
+            `/api/products/search?name=${encodeURIComponent(productName)}`
+        );
+
+        if (!response.ok) {
+
+            showToast(`"${productName}" not found.`, "error");
+
+            return;
+
+        }
+
+        const product = await response.json();
+
+        await fetch(`/api/cart/add/${product.id}`, {
+
+            method: "POST"
+
+        });
+
+        playBeep();
+
+        showToast(`${product.name} added to cart.`, "success");
+
+        await refreshCart(product.id);
+
+        if (typeof showRecommendations === "function") {
+            await showRecommendations(product.barcode);
+        }
+
+        if (typeof showRecommendedProducts === "function") {
+            lastScannedBarcode = product.barcode;
+            await showRecommendedProducts();
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Voice search failed.", "error");
+
+    }
 
 }
 
