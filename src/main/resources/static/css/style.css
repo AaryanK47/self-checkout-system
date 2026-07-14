@@ -534,3 +534,111 @@ body{
     }
 
 }
+
+.theme-toggle-btn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:1050;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    border:none;
+    background:#ffffff;
+    color:#212529;
+    font-size:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+    cursor:pointer;
+    transition:.25s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.theme-toggle-btn:hover{
+    transform:scale(1.1);
+}
+
+body.dark-mode{
+    background:linear-gradient(135deg,#15171c,#0e1014);
+    color:#e9ecef;
+}
+
+body.dark-mode .card{
+    background:#1e2128;
+    color:#e9ecef;
+    box-shadow:0 10px 25px rgba(0,0,0,.5);
+}
+
+body.dark-mode .store-title{
+    color:#5b9dff;
+}
+
+body.dark-mode .store-subtitle,
+body.dark-mode .text-muted{
+    color:#9aa0a8 !important;
+}
+
+body.dark-mode .table{
+    --bs-table-bg:#262b33;
+    --bs-table-color:#e9ecef;
+    --bs-table-border-color:#3a3f4a;
+    --bs-table-hover-bg:#2d323c;
+    --bs-table-hover-color:#e9ecef;
+    --bs-table-striped-bg:#2a2f38;
+    --bs-table-striped-color:#e9ecef;
+}
+
+body.dark-mode #barcodeInput,
+body.dark-mode .form-control,
+body.dark-mode .form-select{
+    background:#262b33;
+    color:#e9ecef;
+    border-color:#3a3f4a;
+}
+
+body.dark-mode .form-select{
+    --bs-form-select-bg-img:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+body.dark-mode .form-control::placeholder{
+    color:#8b929b;
+}
+
+body.dark-mode .modal-content{
+    background:#1e2128;
+    color:#e9ecef;
+}
+
+body.dark-mode .btn-close{
+    filter:invert(1);
+}
+
+body.dark-mode .success-popup{
+    background:#1e2128;
+    color:#e9ecef;
+}
+
+body.dark-mode .receipt-card hr{
+    border-top:2px dashed #4a4f5a;
+}
+
+body.dark-mode hr{
+    border-color:#3a3f4a;
+}
+
+body.dark-mode .theme-toggle-btn{
+    background:#1e2128;
+    color:#f1c40f;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);
+}
+
+@media print{
+    body.dark-mode{
+        background:white;
+        color:black;
+    }
+    .theme-toggle-btn{
+        display:none !important;
+    }
+}
