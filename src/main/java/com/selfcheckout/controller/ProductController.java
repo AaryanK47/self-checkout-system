@@ -47,4 +47,15 @@ public class ProductController {
 
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> searchProduct(
+            @RequestParam String name) {
+
+        return productService
+                .searchByName(name)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
 }

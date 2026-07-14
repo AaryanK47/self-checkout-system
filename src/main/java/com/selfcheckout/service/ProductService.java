@@ -166,4 +166,10 @@ public class ProductService {
 
         return productRepository.findByNameIn(relatedNames);
     }
+
+    public Optional<Product> searchByName(String name) {
+
+        return productRepository.findFirstByNameContainingIgnoreCase(name);
+
+    }
 }

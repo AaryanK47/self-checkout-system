@@ -817,6 +817,128 @@ function formatCurrency(value) {
 
 }
 
+// ==========================================
+// Voice Search
+// ==========================================
+
+let recognition;
+
+if ('webkitSpeechRecognition' in window) {
+
+    recognition = new webkitSpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+}
+
+async function startVoiceSearch() {
+
+    if (!recognition) {
+
+        showToast("Voice recognition is not supported.", "error");
+
+        return;
+
+    }
+
+    const button = document.getElementById("voiceButton");
+
+    button.innerHTML = "🔴 Listening...";
+
+    button.disabled = true;
+
+    showToast("Listening...", "info");
+
+    recognition.start();
+
+    recognition.onresult = async function(event) {
+
+        const spokenText =
+            event.results[0][0].transcript;
+
+        console.log(spokenText);
+
+        button.innerHTML = "🎤 Voice";
+
+        button.disabled = false;
+
+        searchVoiceProduct(spokenText);
+
+    };
+
+    recognition.onerror = function() {
+
+        button.innerHTML = "🎤 Voice";
+
+        button.disabled = false;
+
+        showToast("Voice recognition failed.", "error");
+
+    };
+
+    recognition.onend = function() {
+
+        button.innerHTML = "🎤 Voice";
+
+        button.disabled = false;
+
+    };
+
+}
+
+async function searchVoiceProduct(productName) {
+
+    try {
+
+        const response = await fetch(
+            `/api/products/search?name=${encodeURIComponent(productName)}`
+        );
+
+        if (!response.ok) {
+
+            showToast(`"${productName}" not found.`, "error");
+
+            return;
+
+        }
+
+        const product = await response.json();
+
+        await fetch(`/api/cart/add/${product.id}`, {
+
+            method: "POST"
+
+        });
+
+        playBeep();
+
+        showToast(`${product.name} added to cart.`, "success");
+
+        await refreshCart(product.id);
+
+        if (typeof showRecommendations === "function") {
+            await showRecommendations(product.barcode);
+        }
+
+        if (typeof showRecommendedProducts === "function") {
+            lastScannedBarcode = product.barcode;
+            await showRecommendedProducts();
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Voice search failed.", "error");
+
+    }
+
+}
+
 // ---------------------------
 // End of File
 // ---------------------------
