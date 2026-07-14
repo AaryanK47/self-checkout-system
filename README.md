@@ -8,27 +8,37 @@
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-Template_Engine-005F0F?style=for-the-badge&logo=thymeleaf)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap)
 ![Maven](https://img.shields.io/badge/Maven-Build-red?style=for-the-badge&logo=apachemaven)
-![Version](https://img.shields.io/badge/Version-v1.0.0-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-v1.1.0-blue?style=for-the-badge)
 
+</p>
+
+<p align="center">
+A modern <strong>Spring Boot</strong> based retail checkout application that simulates a supermarket self-checkout kiosk with barcode scanning, camera scanning, voice search, smart recommendations, and receipt generation.
 </p>
 
 ---
 
 ## 📖 About
 
-The **Self Checkout System** is a full-stack retail checkout application built using **Spring Boot**, **Thymeleaf**, and **MySQL**. It simulates a modern supermarket self-checkout kiosk where customers can scan products using either **manual barcode entry** or the **device camera**, manage their shopping cart, complete payments, and generate printable receipts.
+The **Self Checkout System** is a full-stack retail application developed using **Spring Boot**, **Thymeleaf**, **MySQL**, and **Bootstrap**.
 
-The project demonstrates backend development with Spring Boot, session-based cart management, REST APIs, database integration, and frontend interaction using JavaScript and Bootstrap.
+It recreates a real supermarket self-checkout experience where customers can:
 
----
+- 📦 Scan products using barcode or camera
+- 🎤 Search products using voice commands
+- 🛒 Manage their shopping cart
+- 💡 Receive smart product recommendations
+- 💳 Complete checkout
+- 🧾 Generate and print receipts
 
-# 📸 Application Preview
+This project demonstrates practical implementation of:
 
-<p align="center">
-
-<img src="images/homepage.png" width="100%" alt="Self Checkout System">
-
-</p>
+- Spring Boot MVC Architecture
+- REST APIs
+- Session-Based Cart Management
+- Spring Data JPA
+- MySQL Database Integration
+- Responsive Frontend Development
 
 ---
 
@@ -38,46 +48,121 @@ The project demonstrates backend development with Spring Boot, session-based car
 
 - Manual barcode scanning
 - Camera barcode scanning
-- Automatic product lookup
-- 100 demo supermarket products
-- Product categories
-- Automatic stock reduction
+- Voice product search
+- Smart product recommendations
+- Frequently bought together suggestions
+- Expanded product catalog (100+ products)
+- Automatic stock management
+
+---
 
 ### 🛒 Shopping Cart
 
-- Add products
+- Add / Remove products
 - Increase / Decrease quantity
-- Remove products
 - Session-based shopping cart
 - Automatic subtotal calculation
 - GST calculation
 - Grand total calculation
 
+---
+
 ### 💳 Checkout
 
 - Payment processing
-- Payment success animation
-- Payment success sound
-- Automatic transaction creation
+- Success animation
+- Success sound
+- Toast notifications
+- Automatic transaction generation
+
+---
 
 ### 🧾 Receipt
 
 - Professional receipt page
-- Print receipt
-- Transaction details
+- Printable receipt
 - GST summary
+- Transaction details
 - Start new purchase
-
-### 🎨 User Experience
-
-- Responsive Bootstrap interface
-- Offline Bootstrap
-- Offline camera barcode scanner
-- Barcode scan beep sound
-- Clean and modern UI
 
 ---
 
+### 🎨 User Experience
+
+- Responsive Bootstrap UI
+- Light & Dark Mode
+- Offline Bootstrap
+- Offline Barcode Scanner
+- Barcode Scan Beep Sound
+- Clean and Modern Interface
+
+---
+
+# 📸 Application Preview
+
+## 🏠 Home Page
+
+<p align="center">
+<img src="images/Home_Page.png" width="95%">
+</p>
+
+---
+
+## 🛒 Shopping Cart
+
+<p align="center">
+<img src="images/Shopping_Cart.png" width="95%">
+</p>
+
+---
+
+## 📷 Barcode Scanner
+
+<p align="center">
+<img src="images/Barcode_Scan.png" width="95%">
+</p>
+
+---
+
+## 🎤 Voice Search
+
+<p align="center">
+<img src="images/Voice_Search.png" width="95%">
+</p>
+
+---
+
+## 🌞 Light Mode
+
+<p align="center">
+<img src="images/Light_Mode.png" width="95%">
+</p>
+
+---
+
+## 🌙 Dark Mode
+
+<p align="center">
+<img src="images/Dark_Mode.png" width="95%">
+</p>
+
+---
+
+## 💡 Smart Product Recommendations
+
+<p align="center">
+<img src="images/Smart_Recommendations.png" width="95%">
+</p>
+
+---
+
+## 🧾 Receipt
+
+<p align="center">
+<img src="images/Receipt_Page.png" width="95%">
+</p>
+
+---
 # 🛠 Technology Stack
 
 | Category | Technology |
@@ -87,9 +172,9 @@ The project demonstrates backend development with Spring Boot, session-based car
 | Frontend | Thymeleaf |
 | Database | MySQL |
 | ORM | Spring Data JPA |
+| Frontend Technologies | HTML, CSS, JavaScript |
 | Styling | Bootstrap 5 |
 | Build Tool | Maven |
-| Frontend Technologies | HTML, CSS, JavaScript |
 | Barcode Scanner | html5-qrcode |
 | IDE | IntelliJ IDEA |
 
@@ -102,37 +187,35 @@ SelfCheckoutSystem
 │
 ├── src
 │   ├── main
+│   │   ├── java
+│   │   │   └── com.selfcheckout
+│   │   │       ├── config
+│   │   │       ├── controller
+│   │   │       ├── entity
+│   │   │       ├── model
+│   │   │       ├── repository
+│   │   │       └── service
+│   │   │
+│   │   └── resources
+│   │       ├── static
+│   │       │   ├── css
+│   │       │   ├── js
+│   │       │   └── audio
+│   │       │
+│   │       └── templates
+│   │           ├── checkout.html
+│   │           └── receipt.html
 │   │
-│   ├── java
-│   │   └── com.selfcheckout
-│   │       ├── config
-│   │       ├── controller
-│   │       ├── entity
-│   │       ├── model
-│   │       ├── repository
-│   │       └── service
-│   │
-│   └── resources
-│       ├── static
-│       │   ├── audio
-│       │   ├── css
-│       │   └── js
-│       │
-│       └── templates
-│           ├── checkout.html
-│           └── receipt.html
-│
 ├── images
-│   └── homepage.png
-│
 ├── pom.xml
 └── README.md
 ```
 
 ---
-# ⚙ Installation
 
-### 1. Clone the Repository
+# 🚀 Getting Started
+
+## 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/AaryanK47/self-checkout-system.git
@@ -140,15 +223,13 @@ git clone https://github.com/AaryanK47/self-checkout-system.git
 
 ---
 
-### 2. Open the Project
+## 2️⃣ Open in IntelliJ IDEA
 
-Import the project into **IntelliJ IDEA** as a Maven project.
+Import the project as a **Maven Project**.
 
 ---
 
-### 3. Create the Database
-
-Create a MySQL database.
+## 3️⃣ Create MySQL Database
 
 ```sql
 CREATE DATABASE self_checkout_db;
@@ -156,15 +237,15 @@ CREATE DATABASE self_checkout_db;
 
 ---
 
-### 4. Configure Database
+## 4️⃣ Configure Database
 
-Open:
+Open
 
 ```text
 src/main/resources/application.properties
 ```
 
-Update the database configuration according to your local MySQL installation.
+Update your MySQL credentials:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/self_checkout_db
@@ -174,15 +255,17 @@ spring.datasource.password=WRITE_YOUR_PASSWORD_HERE
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-> Replace `WRITE_YOUR_PASSWORD_HERE` with your local MySQL password.
+Replace
+
+```
+WRITE_YOUR_PASSWORD_HERE
+```
+
+with your local MySQL password.
 
 ---
 
-### 5. Install Dependencies
-
-Maven will automatically download all required dependencies.
-
-Or manually run:
+## 5️⃣ Install Dependencies
 
 ```bash
 mvn clean install
@@ -190,21 +273,25 @@ mvn clean install
 
 ---
 
-### 6. Run the Application
+## 6️⃣ Run the Application
 
-Run the Spring Boot application from IntelliJ IDEA
-
-or
+Using Maven
 
 ```bash
 mvn spring-boot:run
 ```
 
+OR simply run
+
+```
+SelfCheckoutSystemApplication.java
+```
+
+from IntelliJ IDEA.
+
 ---
 
-### 7. Open the Application
-
-Open your browser and navigate to:
+## 7️⃣ Open the Application
 
 ```
 http://localhost:8080
@@ -212,149 +299,169 @@ http://localhost:8080
 
 ---
 
-# 📦 Demo Data
-
-The application automatically seeds the database with **100 supermarket products** during the first run.
-
-Examples:
-
-| Barcode | Product |
-|----------|---------|
-| 1 | Milk |
-| 2 | Bread |
-| 18 | Chocolate |
-| 42 | Soap |
-| 69 | Coconut Water |
-| 100 | Wheat Flour (5 kg) |
-
----
-
 # 📡 REST API Endpoints
 
-## Product Scanning
+## Product
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/scan/{barcode}` | Scan product by barcode |
+|---------|----------|-------------|
+| GET | `/api/scan/{barcode}` | Scan Product |
 
 ---
 
 ## Shopping Cart
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/cart/add/{id}` | Add product |
-| GET | `/api/cart` | View cart |
-| PUT | `/api/cart/increase/{id}` | Increase quantity |
-| PUT | `/api/cart/decrease/{id}` | Decrease quantity |
-| DELETE | `/api/cart/remove/{id}` | Remove product |
+| Method | Endpoint |
+|---------|----------|
+| POST | `/api/cart/add/{id}` |
+| GET | `/api/cart` |
+| PUT | `/api/cart/increase/{id}` |
+| PUT | `/api/cart/decrease/{id}` |
+| DELETE | `/api/cart/remove/{id}` |
 
 ---
 
-## Payment
+## Checkout
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/payment/checkout` | Complete checkout |
+| Method | Endpoint |
+|---------|----------|
+| POST | `/api/payment/checkout` |
 
 ---
 
 ## Receipt
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/receipt/{transactionId}` | View receipt |
+| Method | Endpoint |
+|---------|----------|
+| GET | `/receipt/{transactionId}` |
 
 ---
 
-# 🚀 Key Highlights
+# ⭐ Project Highlights
 
-- Camera-based barcode scanning
-- Offline Bootstrap integration
-- Offline barcode scanner library
-- Session-based shopping cart
-- Automatic inventory management
-- Payment processing
-- Printable receipt generation
-- Responsive user interface
-- Professional layered architecture
-- Spring Boot MVC application
+- 📷 Camera Barcode Scanner
+- 🎤 Voice Product Search
+- 💡 Smart Product Recommendations
+- 🛍 Frequently Bought Together
+- 🌙 Dark Mode
+- 🔔 Toast Notifications
+- 📦 Inventory Management
+- 🧾 Printable Receipt
+- 💳 Checkout Workflow
+- 📱 Responsive UI
+- ⚡ Spring Boot MVC Architecture
+---
+
+# 🤝 Contributors
+
+This project was built through collaborative development using GitHub.
+
+| Contributor | Role |
+|-------------|------|
+| **Aaryan Kumar** | Project Owner • Backend Development • Database Design • Spring Boot Architecture • REST APIs • Shopping Cart • Checkout Workflow • Documentation |
+| **Ankith** | UI Enhancements • Dark Mode • Voice Search • Smart Recommendations • Frequently Bought Together • Toast Notifications |
 
 ---
-# 🗺 Roadmap
 
-### ✅ Version 1.0.0 (Current)
+# 🚀 Future Enhancements
 
-- Manual barcode scanning
+Some features planned for future releases:
+
+- 🔐 User Authentication & Login
+- 📜 Transaction History
+- 📊 Admin Dashboard
+- 💳 Online Payment Gateway Integration
+- 📱 QR Code Payment
+- 📦 Inventory Analytics
+- 📄 PDF Receipt Download
+- 🐳 Docker Deployment
+- 🧪 Unit Testing (JUnit & Mockito)
+- 📘 Swagger / OpenAPI Documentation
+
+---
+
+# 💼 Skills Demonstrated
+
+This project demonstrates practical experience with:
+
+- Java 17
+- Spring Boot MVC
+- Spring Data JPA
+- REST API Development
+- MySQL
+- Thymeleaf
+- Bootstrap 5
+- HTML, CSS & JavaScript
+- Session Management
+- CRUD Operations
+- MVC Architecture
+- Git & GitHub Collaboration
+- Maven
+- Responsive UI Design
+
+---
+
+# 🎯 Learning Outcomes
+
+Through this project I gained hands-on experience in:
+
+- Building full-stack Java applications
+- Designing layered architecture
+- Developing RESTful APIs
+- Database integration using JPA
+- Managing user sessions
+- Building responsive web interfaces
+- Version control using Git & GitHub
+- Collaborative development using Pull Requests
+
+---
+
+# 🌟 Why This Project?
+
+This project was developed to simulate a **real-world supermarket self-checkout kiosk**.
+
+Instead of creating a basic CRUD application, the focus was on implementing practical retail features such as:
+
+- Barcode-based product scanning
 - Camera barcode scanning
+- Voice-enabled product search
+- Smart shopping recommendations
 - Shopping cart management
-- Session-based cart
-- Payment processing
 - Receipt generation
-- Receipt printing
-- Payment success animation
-- Barcode scan sound
-- Offline Bootstrap
-- Offline barcode scanner
-- 100 demo supermarket products
+- Modern responsive UI
+- Dark Mode support
 
----
-
-### 🚀 Planned Enhancements
-
-- Transaction history
-- Search previous transactions
-- Reprint receipts
-- Global exception handling
-- Swagger / OpenAPI documentation
-- Unit testing (JUnit & Mockito)
-- Docker support
+The project follows a clean MVC architecture and demonstrates full-stack Java web development using Spring Boot.
 
 ---
 
 # 👨‍💻 Author
 
-**Aaryan Kumar**
+## Aaryan Kumar
+
+🎓 Computer Science Student
+
+💻 Passionate about Java, Spring Boot, Full Stack Development & Problem Solving.
+
+### Connect with me
 
 - GitHub: https://github.com/AaryanK47
 - LinkedIn: https://www.linkedin.com/in/aaryan-kumar-631884297/
 
 ---
 
-# 📄 License
-
-This project is licensed under the **MIT License**.
-
-You are free to use, modify, and distribute this project for educational and personal purposes.
-
----
-
-# 🙏 Acknowledgements
-
-This project was developed as a learning project to understand:
-
-- Spring Boot MVC Architecture
-- Spring Data JPA
-- Thymeleaf
-- Session Management
-- REST API Integration
-- MySQL Database
-- Bootstrap 5
-- Camera Barcode Scanning
-- Retail Checkout Workflow
-
----
-
 # ⭐ Support
 
-If you found this project helpful, consider giving it a **⭐ Star** on GitHub.
+If you found this project useful, consider giving it a **⭐ Star** on GitHub.
 
-It helps others discover the project and supports future improvements.
+It helps support the project and motivates future improvements.
 
 ---
 
 <p align="center">
 
-Made with ❤️ using Spring Boot
+### Thank you for visiting! 🚀
+
+Made with ❤️ using **Spring Boot**, **Thymeleaf**, **MySQL**, and **Bootstrap**
 
 </p>
