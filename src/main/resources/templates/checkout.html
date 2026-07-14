@@ -332,8 +332,62 @@
 
 </div>
 
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/js/html5-qrcode.min.js}"></script>
+
+<script>
+
+    function showToast(message, type = "success") {
+
+        let background;
+
+        switch(type){
+
+            case "success":
+                background = "#28a745";
+                break;
+
+            case "error":
+                background = "#dc3545";
+                break;
+
+            case "warning":
+                background = "#ffc107";
+                break;
+
+            case "info":
+                background = "#0d6efd";
+                break;
+
+            default:
+                background = "#343a40";
+
+        }
+
+        Toastify({
+
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            close: true,
+            stopOnFocus: true,
+
+            style: {
+                background: background
+            }
+
+        }).showToast();
+
+    }
+
+</script>
+
 <script th:src="@{/js/checkout.js}"></script>
 
 </body>

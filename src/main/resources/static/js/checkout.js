@@ -141,7 +141,7 @@ async function scanBarcode() {
 
     if (barcode === "") {
 
-        alert("Please enter a barcode.");
+        showToast("Please enter a barcode.", "warning");
 
         barcodeInput.focus();
 
@@ -155,7 +155,7 @@ async function scanBarcode() {
 
         if (!response.ok) {
 
-            alert("Product not found.");
+            showToast("Product not found.", "error");
 
             barcodeInput.value = "";
 
@@ -175,6 +175,8 @@ async function scanBarcode() {
 
         playBeep();
 
+        showToast(`${product.name} added to cart.`, "success");
+
         barcodeInput.value = "";
 
         barcodeInput.focus();
@@ -187,7 +189,7 @@ async function scanBarcode() {
 
         console.error(error);
 
-        alert("Unable to scan product.");
+        showToast("Unable to scan product.", "error");
 
     }
 
@@ -296,7 +298,7 @@ async function refreshCart(highlightProductId = null) {
 
         console.error(error);
 
-        alert("Unable to refresh cart.");
+        showToast("Unable to refresh cart.", "error");
 
     }
 
@@ -370,7 +372,7 @@ async function openCamera() {
 
         console.error(error);
 
-        alert("Unable to access camera.");
+        showToast("Unable to access camera.", "error");
 
     }
 
@@ -407,7 +409,7 @@ async function addScannedProduct(barcode) {
 
         if (!response.ok) {
 
-            alert("Product not found.");
+            showToast("Product not found.", "error");
 
             scanInProgress = false;
 
@@ -425,6 +427,8 @@ async function addScannedProduct(barcode) {
 
         playBeep();
 
+        showToast(`${product.name} added to cart.`, "success");
+
         refreshCart();
 
         await closeCamera();
@@ -437,7 +441,7 @@ async function addScannedProduct(barcode) {
 
         console.error(error);
 
-        alert("Scanning failed.");
+        showToast("Scanning failed.", "error");
 
     }
 
@@ -493,6 +497,8 @@ async function removeItem(productId) {
 
     });
 
+    showToast("Item removed from cart.", "info");
+
     refreshCart();
 
 }
@@ -532,7 +538,7 @@ async function checkout() {
 
             const message = await response.text();
 
-            alert(message);
+            showToast(message, "error");
 
             return;
 
@@ -547,6 +553,8 @@ async function checkout() {
         playSuccessSound();
 
         showSuccessPopup();
+
+        showToast("Payment successful!", "success");
 
         // Redirect after animation finishes
         setTimeout(() => {
@@ -565,7 +573,7 @@ async function checkout() {
 
         console.error(error);
 
-        alert("Checkout failed.");
+        showToast("Checkout failed.", "error");
 
     }
 
