@@ -11,6 +11,7 @@ let cameraRunning = false;
 
 let cameraModal = null;
 let scanInProgress = false;
+let lastScannedBarcode = null;
 // ---------------------------
 // Page Load
 // ---------------------------
@@ -173,6 +174,8 @@ async function scanBarcode() {
 
         });
 
+        lastScannedBarcode = barcode;
+
         playBeep();
 
         showToast(`${product.name} added to cart.`, "success");
@@ -293,6 +296,8 @@ async function refreshCart(highlightProductId = null) {
 
         document.getElementById("total").innerText =
             cart.total;
+
+        await showRecommendedProducts();
 
     }
 
@@ -427,6 +432,8 @@ async function addScannedProduct(barcode) {
 
         });
 
+        lastScannedBarcode = barcode;
+
         playBeep();
 
         showToast(`${product.name} added to cart.`, "success");
@@ -533,6 +540,128 @@ async function addRecommendedProduct(productId, barcode) {
     catch (error) {
         console.error(error);
         showToast("Unable to add product.", "error");
+    }
+
+}
+
+// ---------------------------
+// Recommended Products
+// ---------------------------
+
+async function showRecommendedProducts() {
+
+    const section = document.getElementById("recommendedProductsCard");
+
+    try {
+
+        const params = lastScannedBarcode
+            ? `?lastScannedBarcode=${encodeURIComponent(lastScannedBarcode)}`
+            : "";
+
+        const response = await fetch(`/api/products/recommended${params}`);
+
+        if (!response.ok) {
+
+            section.style.display = "none";
+
+            return;
+
+        }
+
+        const data = await response.json();
+
+        renderRecommendationGroup("popularGroup", "popularBody", data.popular);
+        renderRecommendationGroup("basedOnCartGroup", "basedOnCartBody", data.basedOnCart);
+        renderRecommendationGroup("sameCategoryGroup", "sameCategoryBody", data.sameCategory);
+        renderRecommendationGroup("dailyPicksGroup", "dailyPicksBody", data.dailyPicks);
+
+        const hasAny =
+            (data.popular && data.popular.length) ||
+            (data.basedOnCart && data.basedOnCart.length) ||
+            (data.sameCategory && data.sameCategory.length) ||
+            (data.dailyPicks && data.dailyPicks.length);
+
+        section.style.display = hasAny ? "block" : "none";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        section.style.display = "none";
+
+    }
+
+}
+
+function renderRecommendationGroup(groupId, bodyId, products) {
+
+    const group = document.getElementById(groupId);
+    const body = document.getElementById(bodyId);
+
+    if (!products || products.length === 0) {
+
+        group.style.display = "none";
+
+        return;
+
+    }
+
+    body.innerHTML = "";
+
+    products.forEach(product => {
+
+        body.innerHTML += `
+
+            <div class="col-md-3 col-sm-6">
+
+                <div class="recommend-item p-3">
+
+                    <div class="fw-bold mb-1">${product.name}</div>
+
+                    <div class="text-success mb-2">₹${product.price}</div>
+
+                    <button
+                        class="btn btn-primary btn-sm w-100"
+                        onclick="addRecommendedToCart(${product.id})">
+
+                        + Add
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+    group.style.display = "block";
+
+}
+
+async function addRecommendedToCart(productId) {
+
+    try {
+
+        await fetch(`/api/cart/add/${productId}`, { method: "POST" });
+
+        playBeep();
+
+        showToast("Item added to cart.", "success");
+
+        await refreshCart(productId);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Unable to add product.", "error");
+
     }
 
 }

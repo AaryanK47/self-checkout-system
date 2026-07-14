@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -17,11 +18,33 @@ public class ProductController {
         this.productService = productService;
     }
 
+    // ==========================================
+    // Frequently Bought Together
+    // ==========================================
+
     @GetMapping("/recommendations/{barcode}")
     public ResponseEntity<?> getRecommendations(@PathVariable String barcode) {
 
-        List<Product> recommendations = productService.getFrequentlyBoughtTogether(barcode);
+        List<Product> recommendations =
+                productService.getFrequentlyBoughtTogether(barcode);
 
         return ResponseEntity.ok(recommendations);
+
     }
+
+    // ==========================================
+    // Smart Recommendations
+    // ==========================================
+
+    @GetMapping("/recommended")
+    public ResponseEntity<?> getRecommendedProducts(
+            @RequestParam(required = false) String lastScannedBarcode) {
+
+        Map<String, List<Product>> recommendations =
+                productService.getRecommendedProducts(lastScannedBarcode);
+
+        return ResponseEntity.ok(recommendations);
+
+    }
+
 }
